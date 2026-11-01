@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="text-center max-w-700 mx-auto mb-4">
+        <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold mb-2">
+            <i class="fa-solid fa-book-bookmark me-1"></i> Agricultural Knowledge Base
+        </span>
+        <h1 class="fw-bold text-dark mb-2">Crop, Disease & Pest Compendium</h1>
+        <p class="text-secondary mb-0">
+            Scientifically verified profiles covering 12 major crops, 14 fungal/bacterial/viral pathologies, and 10 destructive agricultural insect pests.
+        </p>
+    </div>
+
+    <!-- Search and Filter Controls -->
+    <div class="card border-0 shadow-sm rounded-4 p-3 bg-white mb-4">
+        <div class="row g-3 align-items-center">
+            <!-- Search Bar -->
+            <div class="col-lg-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0 text-muted">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input type="text" id="encyclopediaSearch" class="form-control bg-light border-start-0 ps-0" placeholder="Search by disease, pest, crop, or pathogen scientific name..." onkeyup="filterEncyclopedia()">
+                </div>
+            </div>
+
+            <!-- Category Filter Buttons -->
+            <div class="col-lg-4">
+                <select id="categoryFilter" class="form-select bg-light" onchange="filterEncyclopedia()">
+                    <option value="all">All Diagnostic Categories</option>
+                    <option value="Healthy Crop">Healthy Crops</option>
+                    <option value="Fungal Disease">Fungal Diseases</option>
+                    <option value="Bacterial Disease">Bacterial Diseases</option>
+                    <option value="Viral Disease">Viral Diseases</option>
+                    <option value="Pest Infestation">Pest Infestations</option>
+                </select>
+            </div>
+
+            <!-- Crop Filter -->
+            <div class="col-lg-3">
+                <select id="cropFilter" class="form-select bg-light" onchange="filterEncyclopedia()">
+                    <option value="all">All Crops</option>
+                    {% for c in crops %}
+                        <option value="{{ c }}">{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Counter -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-secondary small">
+            Displaying <strong id="itemCountDisplay">{{ items|length }}</strong> registered agronomic profiles
+        </span>
+        <span class="small text-muted">
+            <i class="fa-solid fa-database me-1"></i> Sourced from PlantVillage, PlantDoc & IP102
+        </span>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="row g-4" id="encyclopediaGrid">
+        {% for item in items %}
+        <div class="col-md-6 col-lg-4 encyclopedia-item"
+             data-category="{{ item.category }}"
+             data-crop="{{ item.crop_name }}"
+             data-search="{{ item.name }} {{ item.scientific_name }} {{ item.crop_name }} {{ item.symptoms }}">
+            <div class="encyclopedia-card p-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge bg-light text-dark border fw-semibold">
+                        <i class="fa-solid fa-wheat-awn text-success me-1"></i> {{ item.crop_name }}
+                    </span>
+                    {% if item.category == 'Healthy Crop' %}
+                        <span class="badge-category badge-healthy">Healthy</span>
+                    {% elif item.category == 'Pest Infestation' %}
+                        <span class="badge-category badge-pest">Pest</span>
+                    {% elif 'Fungal' in item.category %}
+                        <span class="badge-category badge-fungal">Fungal</span>
+                    {% elif 'Bacterial' in item.category %}
+                        <span class="badge-category badge-bacterial">Bacterial</span>
+                    {% elif 'Viral' in item.category %}
+                        <span class="badge-category badge-viral">Viral</span>
+                    {% else %}
+                        <span class="badge-category badge-unknown">Unsupported</span>
+                    {% endif %}
+                </div>
+
+                <h5 class="fw-bold text-dark mb-1">{{ item.name }}</h5>
+                <p class="text-muted fst-italic small mb-2" style="font-size: 0.82rem;">
+                    {{ item.scientific_name or 'N/A' }}
+                </p>
+
+                <p class="text-secondary small mb-3 flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.5;">
+                    {{ item.symptoms }}
+                </p>
+
+                <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-auto">
+                    <span class="small text-muted">
+                        Severity: 
+                        {% if item.severity_potential == 'Critical' %}
+                            <strong class="text-danger">Critical</strong>
+                        {% elif item.severity_potential == 'High' %}
+                            <strong class="text-warning">High</strong>
+                        {% elif item.severity_potential == 'None' %}
+                            <strong class="text-success">None</strong>
+                        {% else %}
+                            <strong class="text-secondary">Moderate</strong>
+                        {% endif %}
+                    </span>
+                    <button type="button" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-semibold" onclick="openItemModal('{{ item.slug }}')">
+                        <i class="fa-solid fa-eye me-1"></i> Full Dossier
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Empty State -->
+    <div id="noResultsState" class="text-center py-5 d-none">
+        <i class="fa-solid fa-seedling text-muted fa-3x mb-3"></i>
+        <h5 class="fw-bold text-dark">No Matching Agricultural Profiles Found</h5>
+        <p class="text-secondary small">Try adjusting your search terms or clearing the category and crop filters.</p>
+        <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3" onclick="clearFilters()">Reset Filters</button>
+    </div>
+</div>
+
+<!-- Detailed Agronomic Modal -->
+<div class="modal fade" id="itemDetailModal" tabindex="-1" aria-labelledby="modalItemTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-bottom py-3 px-4 bg-light">
+                <div>
+                    <h5 class="modal-title fw-bold text-dark mb-0" id="modalItemTitle">Loading Dossier...</h5>
+                    <small class="text-muted fst-italic" id="modalItemScientific"></small>
+                </div>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4" id="modalItemBody">
+                <div class="text-center py-4">
+                    <i class="fa-solid fa-spinner fa-spin text-success fa-2x"></i>
+                </div>
+            </div>
+            <div class="modal-footer border-top py-2 px-4 bg-light">
+                <button type="button" class="btn btn-secondary btn-sm rounded-pill px-3" data-bs-dismiss="modal">Close</button>
+                <a href="/detect" class="btn btn-success btn-sm rounded-pill px-3 fw-semibold">
+                    <i class="fa-solid fa-camera me-1"></i> Scan This Specimen
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function filterEncyclopedia() {
+    const q = document.getElementById('encyclopediaSearch').value.toLowerCase().trim();
+    const cat = document.getElementById('categoryFilter').value.toLowerCase();
+    const crop = document.getElementById('cropFilter').value.toLowerCase();
+    const items = document.querySelectorAll('.encyclopedia-item');
+    let visibleCount = 0;
+
+    items.forEach(el => {
+        const itemCat = el.getAttribute('data-category').toLowerCase();
+        const itemCrop = el.getAttribute('data-crop').toLowerCase();
+        const itemSearch = el.getAttribute('data-search').toLowerCase();
+
+        const matchCat = (cat === 'all' || itemCat.includes(cat));
+        const matchCrop = (crop === 'all' || itemCrop.includes(crop));
+        const matchSearch = (!q || itemSearch.includes(q));
+
+        if (matchCat && matchCrop && matchSearch) {
+            el.style.display = '';
+            visibleCount++;
+        } else {
+            el.style.display = 'none';
+        }
+    });
+
+    document.getElementById('itemCountDisplay').textContent = visibleCount;
+    document.getElementById('noResultsState').classList.toggle('d-none', visibleCount > 0);
+}
+
+function clearFilters() {
+    document.getElementById('encyclopediaSearch').value = '';
+    document.getElementById('categoryFilter').value = 'all';
+    document.getElementById('cropFilter').value = 'all';
+    filterEncyclopedia();
+}
+
+function openItemModal(slug) {
+    const modal = new bootstrap.Modal(document.getElementById('itemDetailModal'));
+    modal.show();
+
+    document.getElementById('modalItemTitle').textContent = 'Loading...';
+    document.getElementById('modalItemScientific').textContent = '';
+    document.getElementById('modalItemBody').innerHTML = `
+        <div class="text-center py-5">
+            <i class="fa-solid fa-spinner fa-spin text-success fa-2x mb-2"></i>
+            <p class="small text-muted">Retrieving verified agronomic profile...</p>
+        </div>`;
+
+    fetch('/api/encyclopedia/item/' + slug)
+        .then(r => r.json())
+        .then(res => {
+            if (!res.success) throw new Error('Not found');
+            const it = res.item;
+            document.getElementById('modalItemTitle').textContent = it.name;
+            document.getElementById('modalItemScientific').textContent = it.scientific_name ? `${it.scientific_name} • ${it.crop_name}` : it.crop_name;
+
+            document.getElementById('modalItemBody').innerHTML = `
+                <div class="d-flex gap-2 mb-3">
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">${it.category}</span>
+                    <span class="badge bg-light text-dark border">Target Crop: ${it.crop_name}</span>
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Severity: ${it.severity_potential}</span>
+                </div>
+
+                <div class="mb-3">
+                    <h6 class="fw-bold text-dark mb-1"><i class="fa-solid fa-magnifying-glass text-primary me-1"></i> Symptoms & Visible Damage:</h6>
+                    <p class="small text-secondary leading-relaxed mb-0">${it.symptoms || 'N/A'}</p>
+                </div>
+
+                <div class="mb-3">
+                    <h6 class="fw-bold text-dark mb-1"><i class="fa-solid fa-microscope text-primary me-1"></i> Etiology & Causes:</h6>
+                    <p class="small text-secondary leading-relaxed mb-0">${it.causes_biology || 'N/A'}</p>
+                </div>
+
+                <div class="p-3 bg-light rounded-3 mb-3">
+                    <h6 class="fw-bold text-dark mb-1 small"><i class="fa-solid fa-cloud-sun text-warning me-1"></i> Encouraging Environmental Conditions:</h6>
+                    <p class="small text-secondary mb-0">${it.encouraging_conditions || 'High humidity and specific seasonal temperatures.'}</p>
+                </div>
+
+                <div class="card border-success-subtle bg-success-subtle bg-opacity-25 rounded-3 p-3 mb-2">
+                    <h6 class="fw-bold text-success mb-1 small"><i class="fa-solid fa-leaf me-1"></i> Biological Control:</h6>
+                    <p class="small text-dark mb-0">${it.biological_control || 'N/A'}</p>
+                </div>
+
+                <div class="card border-primary-subtle bg-primary-subtle bg-opacity-25 rounded-3 p-3 mb-2">
+                    <h6 class="fw-bold text-primary mb-1 small"><i class="fa-solid fa-tractor me-1"></i> Cultural Management:</h6>
+                    <p class="small text-dark mb-0">${it.cultural_control || 'N/A'}</p>
+                </div>
+
+                <div class="card border-danger-subtle bg-danger-subtle bg-opacity-25 rounded-3 p-3 mb-3">
+                    <h6 class="fw-bold text-danger mb-1 small"><i class="fa-solid fa-flask me-1"></i> Chemical Management:</h6>
+                    <p class="small text-dark mb-0">${it.chemical_management || 'N/A'}</p>
+                </div>
+
+                <div class="p-3 bg-light rounded-3">
+                    <h6 class="fw-bold text-dark mb-1 small"><i class="fa-solid fa-shield-halved text-success me-1"></i> Prevention & IPM:</h6>
+                    <p class="small text-secondary mb-0">${it.prevention_methods || it.ipm_recommendations || 'Regular field scouting and resistant varieties.'}</p>
+                </div>
+            `;
+        })
+        .catch(err => {
+            document.getElementById('modalItemBody').innerHTML = `
+                <div class="alert alert-danger py-3 text-center small">
+                    Failed to load profile for ${slug}.
+                </div>`;
+        });
+}
+</script>
+{% endblock %}
+

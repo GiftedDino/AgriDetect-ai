@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Academic Header -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white mb-5">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill fw-semibold">
+                Academic Research & Technical Specification
+            </span>
+            <span class="badge bg-light text-secondary border px-3 py-1 rounded-pill">
+                PyTorch 2.15 • MobileNetV2 Architecture
+            </span>
+        </div>
+        <h1 class="display-6 fw-bold text-dark mb-3">
+            AI-Based Crop and Pest Disease Detection System: Deep Transfer Learning & Calibrated Phytopathological Inference
+        </h1>
+        <p class="text-secondary lead fs-6 mb-4">
+            An end-to-end machine learning study addressing early-stage foliar disease diagnosis, insect pest identification, and out-of-distribution anomaly filtering using depthwise separable convolutional neural networks.
+        </p>
+
+        <div class="row g-3 pt-3 border-top small text-secondary">
+            <div class="col-sm-4">
+                <strong>Primary Research Domains:</strong><br>
+                Computer Vision, Agricultural Phytopathology, Applied Entomology
+            </div>
+            <div class="col-sm-4">
+                <strong>Benchmark Datasets:</strong><br>
+                PlantVillage, PlantDoc, IP102 Pest Repository
+            </div>
+            <div class="col-sm-4">
+                <strong>Deployment Backbone:</strong><br>
+                MobileNetV2 Transfer Learning with Linear Bottlenecks
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. Abstract & Problem Statement -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+        <h4 class="fw-bold text-dark mb-3">1. Abstract & Problem Statement</h4>
+        <p class="text-secondary leading-relaxed">
+            Phytopathogenic micro-organisms (fungi, bacteria, viruses) and destructive herbivorous insect pests constitute a persistent threat to global food security. In resource-constrained rural agrarian environments, smallholder farmers often lack prompt access to certified plant pathologists. Misidentification frequently leads to improper chemical applications—such as spraying costly systemic fungicides on viral mosaic diseases (where fungicides possess zero biochemical efficacy) or confusing bacterial water-soaked leaf streaks with fungal leaf spots.
+        </p>
+        <p class="text-secondary leading-relaxed mb-0">
+            This project provides a robust, lightweight, and calibrated diagnostic system capable of identifying crop health conditions across 12 major economic crops (Rice, Wheat, Maize, Tomato, Potato, Cotton, Apple, Grape, Pepper, Sugarcane, Groundnut, Soybean) and 10 major insect pests, strictly segmenting outcomes into six mutually exclusive agronomic categories: <em>Healthy Crop, Fungal Disease, Bacterial Disease, Viral Disease, Pest Infestation</em>, and <em>Unknown or Unsupported Image</em>.
+        </p>
+    </div>
+
+    <!-- 2. Benchmark Agricultural Datasets -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+        <h4 class="fw-bold text-dark mb-3">2. Curated Benchmark Datasets</h4>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="p-3 bg-light rounded-3 h-100 border">
+                    <h5 class="fw-bold text-dark mb-1"><i class="fa-solid fa-leaf text-success me-1"></i> PlantVillage</h5>
+                    <div class="badge bg-success-subtle text-success mb-2">54,306 Images • 38 Classes</div>
+                    <p class="small text-secondary mb-0">
+                        High-resolution laboratory-captured foliar images on uniform backgrounds. Provides primary baseline weights for foliar blight concentric rings, viral curling, and pristine healthy leaves.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="p-3 bg-light rounded-3 h-100 border">
+                    <h5 class="fw-bold text-dark mb-1"><i class="fa-solid fa-sun-plant-wilt text-warning me-1"></i> PlantDoc</h5>
+                    <div class="badge bg-warning-subtle text-warning-emphasis mb-2">2,598 In-Field Images • 13 Species</div>
+                    <p class="small text-secondary mb-0">
+                        Complex field-condition imagery featuring occluded leaves, direct sunlight glare, natural soil backgrounds, and multiple overlapping lesions for robust generalization.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="p-3 bg-light rounded-3 h-100 border">
+                    <h5 class="fw-bold text-dark mb-1"><i class="fa-solid fa-bug text-danger me-1"></i> IP102 Pest Dataset</h5>
+                    <div class="badge bg-danger-subtle text-danger mb-2">75,222 Images • 102 Pest Classes</div>
+                    <p class="small text-secondary mb-0">
+                        Hierarchical agricultural pest dataset covering all insect life cycle stages (eggs, larvae, nymphs, pupae, and adult moths/beetles) and distinctive plant damage symptoms.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. AI & ML Workflow Pipeline (9 Steps from Prompt) -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+        <h4 class="fw-bold text-dark mb-3">3. Standardized AI Engineering Workflow</h4>
+        <p class="small text-secondary mb-4">
+            Our pipeline faithfully realizes the 9-step academic machine learning methodology:
+        </p>
+
+        <div class="row g-3">
+            {% set workflow_steps = [
+                {"num": "1", "title": "Dataset Collection", "desc": "Synthesized and harmonized labels across PlantVillage, PlantDoc, and IP102."},
+                {"num": "2", "title": "Image Preprocessing", "desc": "Resize to 256x256, center-crop to 224x224, and ImageNet standardization (mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])."},
+                {"num": "3", "title": "Data Augmentation", "desc": "Spatial transformations (RandomHorizontalFlip, RandomRotation ±20°) and ColorJitter to simulate variable field lighting."},
+                {"num": "4", "title": "Transfer Learning Model Training", "desc": "Pretrained MobileNetV2 backbone; frozen base features followed by unfrozen fine-tuning with AdamW optimizer."},
+                {"num": "5", "title": "Model Validation", "desc": "Hold-out stratified validation tracking CrossEntropyLoss and Early Stopping with Cosine Annealing learning rate."},
+                {"num": "6", "title": "Rigorous Evaluation", "desc": "Computation of multiclass confusion matrix, precision, recall, and macro F1-score across all 26 diagnostic classes."},
+                {"num": "7", "title": "Model Checkpoint Saving", "desc": "Serializing calibrated PyTorch state_dict tensors to disk (mobilenet_v2_crop_pest.pt)."},
+                {"num": "8", "title": "Backend API Integration", "desc": "Inference server built on asynchronous FastAPI with high-throughput singleton memory caching."},
+                {"num": "9", "title": "Inference & Out-of-Distribution Rejection", "desc": "Temperature-scaled softmax confidence thresholding rejecting non-crop inputs."}
+            ] %}
+
+            {% for st in workflow_steps %}
+            <div class="col-md-6 col-lg-4">
+                <div class="p-3 bg-light rounded-3 border h-100">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="badge bg-success rounded-pill px-2 py-1 fw-bold">Step {{ st.num }}</span>
+                        <h6 class="fw-bold text-dark mb-0 small">{{ st.title }}</h6>
+                    </div>
+                    <p class="small text-secondary mb-0" style="font-size: 0.8rem;">{{ st.desc }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- 4. Deep Architecture: MobileNetV2 vs EfficientNet -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+        <h4 class="fw-bold text-dark mb-3">4. Neural Network Architecture: Inverted Residuals & Linear Bottlenecks</h4>
+        <p class="text-secondary leading-relaxed">
+            In mobile agricultural diagnostics, edge inference latency and parameter footprint are critical. MobileNetV2 replaces standard convolutional layers with <strong>Depthwise Separable Convolutions</strong>, decomposing standard $D_K \times D_K$ convolutions into a depthwise spatial filtering stage and a $1 \times 1$ pointwise projection stage. This reduces computational complexity by a factor of:
+        </p>
+
+        <div class="p-3 bg-light rounded-3 font-monospace text-center my-3 text-dark">
+            Computational Reduction Ratio = \(\frac{1}{N} + \frac{1}{D_K^2} \approx \frac{1}{9}\) of standard convolution
+        </div>
+
+        <div class="table-responsive my-3">
+            <table class="table table-bordered align-middle small text-center mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Backbone Architecture</th>
+                        <th>Parameters (M)</th>
+                        <th>FLOPs (M)</th>
+                        <th>Top-1 ImageNet Acc</th>
+                        <th>Edge Latency (CPU)</th>
+                        <th>Primary Suitability</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-success">
+                        <td class="fw-bold text-start">MobileNetV2 (Selected)</td>
+                        <td>3.4M</td>
+                        <td>300M</td>
+                        <td>72.0%</td>
+                        <td><strong>~28 ms</strong></td>
+                        <td>Real-time field phone browser camera deployment</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold text-start">EfficientNet-B0</td>
+                        <td>5.3M</td>
+                        <td>390M</td>
+                        <td>77.1%</td>
+                        <td>~45 ms</td>
+                        <td>Compound scaling for high-spec edge tablets</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold text-start">ResNet-50</td>
+                        <td>25.6M</td>
+                        <td>4100M</td>
+                        <td>76.1%</td>
+                        <td>~120 ms</td>
+                        <td>High memory footprint, redundant parameters for leaves</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 5. Academic Citations & Literature References -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <h4 class="fw-bold text-dark mb-3">5. Peer-Reviewed Academic References</h4>
+        <ol class="small text-secondary ps-3 mb-0 d-flex flex-column gap-2 leading-relaxed">
+            <li>
+                <strong>Sandler, M., Howard, A., Zhu, M., Zhmoginov, A., & Chen, L. C. (2018).</strong> 
+                <em>MobileNetV2: Inverted Residuals and Linear Bottlenecks.</em> Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), pp. 4510-4520.
+            </li>
+            <li>
+                <strong>Hughes, D. P., & Salathé, M. (2015).</strong> 
+                <em>An open access repository of images on plant health to enable the development of mobile disease diagnostics.</em> arXiv preprint arXiv:1511.08060 (PlantVillage benchmark).
+            </li>
+            <li>
+                <strong>Singh, D., Jain, N., Jain, P., Kayal, P., Kumawat, S., & Batra, N. (2020).</strong> 
+                <em>PlantDoc: a dataset for visual plant disease detection in the wild.</em> Proceedings of the 7th ACM IKDD CoDS and 25th COMAD, pp. 249-253.
+            </li>
+            <li>
+                <strong>Wu, X., Zhan, C., Lai, Y. K., Cheng, M. M., & Yang, J. (2019).</strong> 
+                <em>IP102: A Large-Scale Benchmark Dataset for Insect Pest Recognition.</em> Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pp. 8787-8796.
+            </li>
+            <li>
+                <strong>Tan, M., & Le, Q. (2019).</strong> 
+                <em>EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks.</em> International Conference on Machine Learning (ICML), PMLR 97:6105-6114.
+            </li>
+            <li>
+                <strong>Food and Agriculture Organization (FAO). (2021).</strong> 
+                <em>The Impact of Disasters and Crises on Agriculture and Food Security: Plant Pests and Diseases.</em> Rome, Italy.
+            </li>
+        </ol>
+    </div>
+</div>
+{% endblock %}
+

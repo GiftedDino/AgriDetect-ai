@@ -1,0 +1,389 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="text-center max-w-700 mx-auto mb-5">
+        <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold mb-2">
+            <i class="fa-solid fa-cloud-sun-rain me-1"></i> Agricultural Extension & Meteorological Tools
+        </span>
+        <h1 class="fw-bold text-dark mb-2">Agricultural Resources & Risk Simulator</h1>
+        <p class="text-secondary mb-0">
+            Access leading international phytosanitary organizations and calculate real-time pathogen sporulation risk indices driven by ambient temperature and relative humidity.
+        </p>
+    </div>
+
+    <!-- Weather & Epidemiological Risk Simulator Card -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-5">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-5 border-end-lg">
+                <div class="d-inline-flex align-items-center gap-2 badge bg-primary-subtle text-primary px-3 py-1 rounded-pill mb-2">
+                    <i class="fa-solid fa-calculator"></i> Wallin & Blitecast Disease Modeling
+                </div>
+                <h4 class="fw-bold text-dark mb-2">Microclimatic Disease Risk Calculator</h4>
+                <p class="small text-secondary mb-4">
+                    Atmospheric temperature and relative humidity drive fungal spore germination and bacterial leaf colonization. Enter local meteorological parameters to simulate immediate epidemiological risk.
+                </p>
+
+                <form id="weatherRiskForm" onsubmit="calculateRisk(event)">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dark">Ambient Temperature (°C):</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-temperature-half"></i></span>
+                            <input type="number" id="tempInput" step="0.5" class="form-control" value="22.0" required>
+                            <span class="input-group-text bg-light text-muted">°C</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dark">Relative Humidity (%):</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-droplet"></i></span>
+                            <input type="number" id="humInput" min="10" max="100" class="form-control" value="88" required>
+                            <span class="input-group-text bg-light text-muted">%</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dark">Rainfall / Precipitation (mm):</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-cloud-rain"></i></span>
+                            <input type="number" id="rainInput" min="0" step="0.5" class="form-control" value="4.5">
+                            <span class="input-group-text bg-light text-muted">mm</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-dark">Primary Crop Field:</label>
+                        <select id="cropRiskInput" class="form-select">
+                            <option value="General">General / Multi-Cropping</option>
+                            <option value="Potato">Potato (Late Blight Model)</option>
+                            <option value="Tomato">Tomato (Early Blight / Spot)</option>
+                            <option value="Rice">Rice (Blast / BLB Model)</option>
+                            <option value="Grape">Grape (Downy & Powdery Mildew)</option>
+                            <option value="Cotton">Cotton (Bacterial Blight / Sucking Pests)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-success fw-bold w-100 rounded-pill py-2 shadow-sm">
+                        <i class="fa-solid fa-bolt me-1"></i> Compute Pathogen Sporulation Risk
+                    </button>
+                </form>
+            </div>
+
+            <!-- Risk Output Display -->
+            <div class="col-lg-7 ps-lg-4">
+                <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-chart-pie text-success me-2"></i> Real-Time Epidemiological Pressure</h5>
+                
+                <div class="row g-3 mb-4">
+                    <!-- Late Blight -->
+                    <div class="col-sm-6">
+                        <div class="risk-indicator-box risk-level-high" id="boxLateBlight">
+                            <div class="small fw-semibold text-muted mb-1">Late Blight / Downy Mildew</div>
+                            <div class="h4 fw-bold mb-0" id="valLateBlight">High Risk</div>
+                            <small class="fst-italic" id="subLateBlight">Cool & saturated canopy</small>
+                        </div>
+                    </div>
+
+                    <!-- Rice Blast -->
+                    <div class="col-sm-6">
+                        <div class="risk-indicator-box risk-level-high" id="boxRiceBlast">
+                            <div class="small fw-semibold text-muted mb-1">Rice Blast / Foliar Fungi</div>
+                            <div class="h4 fw-bold mb-0" id="valRiceBlast">High Risk</div>
+                            <small class="fst-italic" id="subRiceBlast">Warm with leaf wetness</small>
+                        </div>
+                    </div>
+
+                    <!-- Bacterial Blight -->
+                    <div class="col-sm-6">
+                        <div class="risk-indicator-box risk-level-moderate" id="boxBacterial">
+                            <div class="small fw-semibold text-muted mb-1">Bacterial Blight / Spot</div>
+                            <div class="h4 fw-bold mb-0" id="valBacterial">Moderate Risk</div>
+                            <small class="fst-italic" id="subBacterial">Warm driving precipitation</small>
+                        </div>
+                    </div>
+
+                    <!-- Sucking Pests -->
+                    <div class="col-sm-6">
+                        <div class="risk-indicator-box risk-level-low" id="boxPests">
+                            <div class="small fw-semibold text-muted mb-1">Sucking Pests (Aphids/Thrips)</div>
+                            <div class="h4 fw-bold mb-0" id="valPests">Low Risk</div>
+                            <small class="fst-italic" id="subPests">Suppressed by rain/humidity</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prescriptive Advisory Output -->
+                <div class="card border-0 bg-light p-3 rounded-3">
+                    <h6 class="fw-bold text-dark mb-2"><i class="fa-solid fa-clipboard-check text-success me-1"></i> Actionable Advisory for Current Conditions:</h6>
+                    <ul class="text-secondary small mb-0 ps-3" id="advisoryList">
+                        <li>High risk for Late Blight / Downy Mildew. Apply prophylactic protectant fungicide (Mancozeb or Copper hydroxide) before rain events.</li>
+                        <li>Environmental conditions favor Blast & Leaf Spot sporulation. Delay nitrogen top-dressing and scout panicle/flag leaves.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- External Agricultural Authorities Directory -->
+    <div class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold text-dark mb-1">International Agricultural Authorities & Extension</h3>
+                <p class="text-secondary small mb-0">Verified global repositories for phytosanitary regulations, diagnostic protocols, and research papers.</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- FAO -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="feature-icon-box icon-green mb-0">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0">FAO Plant Protection</h6>
+                            <small class="text-muted">United Nations</small>
+                        </div>
+                    </div>
+                    <p class="small text-secondary mb-3">
+                        Global phytosanitary standards, transboundary plant pest monitoring (Locust watch, Fall Armyworm), and IPM pesticide risk reduction manuals.
+                    </p>
+                    <a href="https://www.fao.org/plant-protection/en/" target="_blank" rel="noopener" class="btn btn-outline-success btn-sm rounded-pill w-100 fw-semibold">
+                        Visit Portal <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- CABI PlantwisePlus -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="feature-icon-box icon-blue mb-0">
+                            <i class="fa-solid fa-book-medical"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0">CABI PlantwisePlus</h6>
+                            <small class="text-muted">Global Pest Knowledge Bank</small>
+                        </div>
+                    </div>
+                    <p class="small text-secondary mb-3">
+                        Comprehensive diagnostic fact sheets, pest distribution maps, biological control options, and plant clinic training manuals for field practitioners.
+                    </p>
+                    <a href="https://www.cabi.org/plantwiseplus/" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm rounded-pill w-100 fw-semibold">
+                        Explore Knowledge Bank <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ICAR -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="feature-icon-box icon-amber mb-0">
+                            <i class="fa-solid fa-seedling"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0">ICAR Extension</h6>
+                            <small class="text-muted">Council of Agricultural Research</small>
+                        </div>
+                    </div>
+                    <p class="small text-secondary mb-3">
+                        Pioneering tropical crop protection, certified cultivar releases, national pest surveillance bulletins, and Krishi Vigyan Kendra (KVK) advisories.
+                    </p>
+                    <a href="https://icar.org.in/" target="_blank" rel="noopener" class="btn btn-outline-warning btn-sm rounded-pill w-100 fw-semibold text-dark">
+                        Access ICAR Bulletins <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- USDA ARS -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="feature-icon-box icon-purple mb-0">
+                            <i class="fa-solid fa-microscope"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0">USDA - ARS</h6>
+                            <small class="text-muted">Agricultural Research Service</small>
+                        </div>
+                    </div>
+                    <p class="small text-secondary mb-3">
+                        Fundamental research in molecular phytopathology, fungal genetics, plant germplasm repositories, and biological biocontrol agent rearing.
+                    </p>
+                    <a href="https://www.ars.usda.gov/" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm rounded-pill w-100 fw-semibold">
+                        View Research Data <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- CGIAR Centers -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="feature-icon-box icon-green mb-0">
+                            <i class="fa-solid fa-wheat-awn"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0">CGIAR Consortia</h6>
+                            <small class="text-muted">IRRI, CIMMYT & CIP</small>
+                        </div>
+                    </div>
+                    <p class="small text-secondary mb-3">
+                        International Rice Research Institute (Rice Blast), CIMMYT (Wheat rusts), and CIP (Potato Late Blight resistance breeding programs).
+                    </p>
+                    <a href="https://www.cgiar.org/" target="_blank" rel="noopener" class="btn btn-outline-success btn-sm rounded-pill w-100 fw-semibold">
+                        Explore Centers <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- APSnet -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="feature-icon-box icon-blue mb-0">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0">APS - Plant Pathology</h6>
+                            <small class="text-muted">American Phytopathological Society</small>
+                        </div>
+                    </div>
+                    <p class="small text-secondary mb-3">
+                        Peer-reviewed compendia of plant diseases, illustrated disease cycles, diagnostic keys, and educational resources for agronomy students.
+                    </p>
+                    <a href="https://www.apsnet.org/" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm rounded-pill w-100 fw-semibold">
+                        APSnet Education <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Farmer / Student Consultation & Inquiry Form -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                <div class="d-inline-flex align-items-center gap-2 badge bg-success-subtle text-success px-3 py-1 rounded-pill mb-2">
+                    <i class="fa-solid fa-comments"></i> Agronomic Advisory Helpline
+                </div>
+                <h4 class="fw-bold text-dark mb-2">Submit a Field Pathology Inquiry</h4>
+                <p class="text-secondary small mb-3">
+                    Are you observing unusual foliar chlorosis or unexplained pest feeding in your field? Submit your query to our agronomy support archive for academic review and diagnostic assistance.
+                </p>
+                <div class="d-flex flex-column gap-2 small text-muted">
+                    <div><i class="fa-solid fa-check text-success me-2"></i> Free consultation for agricultural students and smallholders</div>
+                    <div><i class="fa-solid fa-check text-success me-2"></i> Integrated with database diagnostic records</div>
+                    <div><i class="fa-solid fa-check text-success me-2"></i> Backed by IPM best-practice guidelines</div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <form id="inquiryForm" onsubmit="submitInquiry(event)">
+                    <div id="inquiryAlert" class="alert alert-success d-none py-2 small mb-3"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dark">Your Name / Student ID:</label>
+                        <input type="text" id="inqName" class="form-control" placeholder="e.g., Alex Johnson" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dark">Email / Contact Number:</label>
+                        <input type="text" id="inqContact" class="form-control" placeholder="e.g., alex.johnson@agri.edu" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dark">Target Crop Species:</label>
+                        <input type="text" id="inqCrop" class="form-control" placeholder="e.g., Tomato, Rice, Cotton..." required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dark">Describe Observed Symptoms / Pest Behavior:</label>
+                        <textarea id="inqText" rows="3" class="form-control" placeholder="e.g., Bullseye circular rings on lower leaves, yellowing halos, dry leaf margins..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success fw-bold w-100 rounded-pill py-2 shadow-sm">
+                        <i class="fa-solid fa-paper-plane me-1"></i> Submit Inquiry to Agronomy Desk
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function calculateRisk(e) {
+    e.preventDefault();
+    const temp = parseFloat(document.getElementById('tempInput').value);
+    const hum = parseFloat(document.getElementById('humInput').value);
+    const rain = parseFloat(document.getElementById('rainInput').value) || 0;
+    const crop = document.getElementById('cropRiskInput').value;
+
+    const fd = new FormData();
+    fd.append('temperature', temp);
+    fd.append('humidity', hum);
+    fd.append('rainfall_mm', rain);
+    fd.append('crop', crop);
+
+    fetch('/api/risk-calculator', { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(res => {
+            if (!res.success) return;
+            const indices = res.data.indices;
+            updateRiskBox('boxLateBlight', 'valLateBlight', indices.late_blight_downy_mildew);
+            updateRiskBox('boxRiceBlast', 'valRiceBlast', indices.rice_blast_foliar_fungi);
+            updateRiskBox('boxBacterial', 'valBacterial', indices.bacterial_blight_spot);
+            updateRiskBox('boxPests', 'valPests', indices.sucking_pests_outbreak);
+
+            const advList = document.getElementById('advisoryList');
+            advList.innerHTML = '';
+            res.data.advisories.forEach(adv => {
+                const li = document.createElement('li');
+                li.textContent = adv;
+                advList.appendChild(li);
+            });
+        });
+}
+
+function updateRiskBox(boxId, valId, level) {
+    const box = document.getElementById(boxId);
+    const val = document.getElementById(valId);
+    box.className = 'risk-indicator-box';
+    val.textContent = level + ' Risk';
+
+    if (level === 'Severe') {
+        box.classList.add('risk-level-severe');
+    } else if (level === 'High') {
+        box.classList.add('risk-level-high');
+    } else if (level === 'Moderate') {
+        box.classList.add('risk-level-moderate');
+    } else {
+        box.classList.add('risk-level-low');
+    }
+}
+
+function submitInquiry(e) {
+    e.preventDefault();
+    const fd = new FormData();
+    fd.append('farmer_name', document.getElementById('inqName').value);
+    fd.append('contact_info', document.getElementById('inqContact').value);
+    fd.append('crop_type', document.getElementById('inqCrop').value);
+    fd.append('inquiry_text', document.getElementById('inqText').value);
+
+    fetch('/api/inquiry', { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(res => {
+            const alert = document.getElementById('inquiryAlert');
+            alert.textContent = res.message;
+            alert.classList.remove('d-none');
+            document.getElementById('inquiryForm').reset();
+        });
+}
+</script>
+{% endblock %}
+

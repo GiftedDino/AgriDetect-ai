@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="text-center max-w-700 mx-auto mb-4">
+        <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold mb-2">
+            <i class="fa-solid fa-microchip me-1"></i> MobileNetV2 Deep Vision Engine
+        </span>
+        <h1 class="fw-bold text-dark mb-2">AI Crop & Pest Disease Diagnosis</h1>
+        <p class="text-secondary mb-0">
+            Upload leaf, stem, fruit, or pest images. The neural model classifies specimens into Healthy, Fungal, Bacterial, Viral, Pest, or Out-of-Distribution categories.
+        </p>
+    </div>
+
+    <!-- 1-Click Academic Demonstration Samples -->
+    <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-white">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-flask-vial text-primary"></i>
+                <span class="fw-bold text-dark small">One-Click Demonstration Specimens:</span>
+                <span class="text-muted small d-none d-md-inline">(Click any specimen to run instantaneous AI inference)</span>
+            </div>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle small">
+                Pre-loaded Field Samples
+            </span>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 pt-1" id="samplePillsContainer">
+            <button type="button" class="sample-pill-btn" onclick="testSample('rice_healthy')">
+                <span class="badge bg-success rounded-circle p-1"></span>
+                <strong>Rice:</strong> Healthy Leaf
+            </button>
+            <button type="button" class="sample-pill-btn" onclick="testSample('potato_late_blight')">
+                <span class="badge bg-danger rounded-circle p-1"></span>
+                <strong>Potato:</strong> Late Blight (Fungal)
+            </button>
+            <button type="button" class="sample-pill-btn" onclick="testSample('tomato_early_blight')">
+                <span class="badge bg-danger rounded-circle p-1"></span>
+                <strong>Tomato:</strong> Early Blight (Fungal)
+            </button>
+            <button type="button" class="sample-pill-btn" onclick="testSample('rice_bacterial_blight')">
+                <span class="badge bg-warning rounded-circle p-1"></span>
+                <strong>Rice:</strong> Bacterial Leaf Blight
+            </button>
+            <button type="button" class="sample-pill-btn" onclick="testSample('cotton_aphids')">
+                <span class="badge bg-danger rounded-circle p-1" style="background:#c2185b !important;"></span>
+                <strong>Cotton:</strong> Aphids Infestation
+            </button>
+            <button type="button" class="sample-pill-btn" onclick="testSample('maize_fall_armyworm')">
+                <span class="badge bg-danger rounded-circle p-1" style="background:#ad1457 !important;"></span>
+                <strong>Maize:</strong> Fall Armyworm (FAW)
+            </button>
+            <button type="button" class="sample-pill-btn" onclick="testSample('unsupported_object')">
+                <span class="badge bg-secondary rounded-circle p-1"></span>
+                <strong>OOD Test:</strong> Non-Plant Sample
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Detection Interactive Card -->
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                
+                <!-- Input Method Toggle (File Upload vs Live Camera) -->
+                <div class="d-flex justify-content-center mb-4">
+                    <div class="btn-group p-1 bg-light rounded-pill border" role="group">
+                        <button type="button" class="btn btn-sm px-4 rounded-pill fw-semibold active" id="tabUploadBtn" onclick="switchInputMode('upload')">
+                            <i class="fa-solid fa-cloud-arrow-up me-1"></i> Upload File / Drag & Drop
+                        </button>
+                        <button type="button" class="btn btn-sm px-4 rounded-pill fw-semibold text-secondary" id="tabCameraBtn" onclick="switchInputMode('camera')">
+                            <i class="fa-solid fa-camera me-1"></i> Capture via Camera
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 1. Drag & Drop Upload Zone -->
+                <div id="uploadModeContainer">
+                    <div class="upload-dropzone mb-3" id="dropzone" onclick="document.getElementById('fileInput').click()">
+                        <input type="file" id="fileInput" accept="image/*" class="d-none" onchange="handleFileSelect(event)">
+                        <div id="dropzonePrompt">
+                            <i class="fa-solid fa-cloud-arrow-up text-success fa-3x mb-3"></i>
+                            <h5 class="fw-bold text-dark mb-1">Drag and drop your crop or pest image here</h5>
+                            <p class="text-secondary small mb-3">Supports JPG, PNG, WEBP (Leaves, stems, fruits, pests) up to 15MB</p>
+                            <button type="button" class="btn btn-outline-success btn-sm rounded-pill px-4 fw-semibold">
+                                <i class="fa-solid fa-folder-open me-1"></i> Browse Files from Device
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Camera Capture Zone (Initially hidden) -->
+                <div id="cameraModeContainer" class="d-none mb-3">
+                    <div class="card border bg-dark text-white rounded-3 p-2 text-center position-relative">
+                        <video id="webcamVideo" autoplay playsinline class="w-100 rounded-3" style="max-height: 340px; background:#000; object-fit: cover;"></video>
+                        <canvas id="cameraCanvas" class="d-none"></canvas>
+                        
+                        <div class="d-flex justify-content-center gap-2 mt-3 pb-2">
+                            <button type="button" class="btn btn-warning rounded-pill fw-semibold px-4" id="captureBtn" onclick="takeSnapshot()">
+                                <i class="fa-solid fa-camera me-1"></i> Snap Photo
+                            </button>
+                            <button type="button" class="btn btn-outline-light rounded-pill btn-sm px-3" id="switchCameraBtn" onclick="switchCamera()">
+                                <i class="fa-solid fa-arrows-rotate me-1"></i> Flip Camera
+                            </button>
+                            <button type="button" class="btn btn-outline-danger rounded-pill btn-sm px-3" onclick="stopCamera()">
+                                <i class="fa-solid fa-power-off me-1"></i> Turn Off
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image Preview and Laser Scan Container -->
+                <div id="previewCard" class="card border-0 bg-light rounded-4 overflow-hidden mb-4 d-none">
+                    <div class="preview-container position-relative">
+                        <img id="imagePreview" src="" alt="Specimen Preview" class="img-fluid">
+                        
+                        <!-- Animated Scanning Laser & Overlay -->
+                        <div class="scanner-overlay" id="scannerOverlay">
+                            <div class="laser-line"></div>
+                            <div class="position-absolute bottom-0 start-0 w-100 p-3 bg-dark bg-opacity-75 text-white">
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <span class="small fw-semibold"><i class="fa-solid fa-spinner fa-spin me-2 text-success"></i> <span id="scanStatusText">Extracting InvertedResidual feature maps...</span></span>
+                                    <span class="badge bg-success" id="scanProgressBadge">AI Processing</span>
+                                </div>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="scanProgressBar" style="width: 45%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white d-flex align-items-center justify-content-between py-2 px-3 border-top">
+                        <span class="small text-muted" id="previewMetaText"><i class="fa-solid fa-image me-1"></i> Specimen ready for diagnosis</span>
+                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" onclick="resetForm()">
+                            <i class="fa-solid fa-rotate-left me-1"></i> Change Image
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="d-grid mt-2">
+                    <button type="button" class="btn btn-success btn-lg fw-bold py-3 rounded-pill shadow-sm" id="analyzeBtn" onclick="runDiagnosis()" disabled>
+                        <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Analyze Image with AI
+                    </button>
+                </div>
+
+                <!-- Guidelines Alert -->
+                <div class="mt-4 p-3 bg-light rounded-3 border">
+                    <h6 class="fw-bold text-dark small mb-2"><i class="fa-solid fa-circle-info text-primary me-1"></i> Optimal Diagnosis Guidelines:</h6>
+                    <ul class="text-secondary small mb-0 ps-3">
+                        <li>Capture the affected foliar surface with clear natural lighting.</li>
+                        <li>For pests (aphids, armyworms, thrips), center closely on insect clusters or chewed whorls.</li>
+                        <li>Unclear, excessively dark, or non-crop photos will be flagged as <strong>Unknown or Unsupported</strong>.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Live Diagnosis Summary Card (Shown upon successful analysis) -->
+        <div class="col-lg-4 d-none" id="resultSummaryCol">
+            <div class="card border-0 shadow rounded-4 p-4 bg-white sticky-top" style="top: 85px;">
+                <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-3">
+                    <h5 class="fw-bold mb-0 text-dark">Diagnostic Result</h5>
+                    <span id="resCategoryBadge" class="badge-category badge-healthy">Healthy</span>
+                </div>
+
+                <div class="text-center mb-3">
+                    <div class="display-6 fw-bold text-dark mb-1" id="resDiagnosisName">-</div>
+                    <div class="text-muted fst-italic small mb-2" id="resScientificName">-</div>
+                    <div class="badge bg-light text-dark border px-3 py-1" id="resCropName">Crop: -</div>
+                </div>
+
+                <!-- Confidence Bar -->
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="small fw-semibold text-secondary">Model Confidence</span>
+                        <span class="small fw-bold text-success" id="resConfidenceText">0%</span>
+                    </div>
+                    <div class="confidence-meter-container">
+                        <div class="confidence-bar-fill" id="resConfidenceBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <!-- Status Details -->
+                <div class="bg-light p-3 rounded-3 mb-4 small">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Health Status:</span>
+                        <strong id="resHealthStatus">-</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Classification Category:</span>
+                        <strong id="resCategoryLabel">-</strong>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Severity Potential:</span>
+                        <strong id="resSeverityLabel">-</strong>
+                    </div>
+                </div>
+
+                <!-- Next Steps Button -->
+                <div class="d-grid gap-2">
+                    <a href="#" id="viewDossierBtn" class="btn btn-success fw-bold py-2 rounded-pill">
+                        <i class="fa-solid fa-file-medical me-1"></i> View Full Advisory Dossier
+                    </a>
+                    <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" onclick="resetForm()">
+                        <i class="fa-solid fa-redo me-1"></i> Scan Another Crop
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/main.js"></script>
+{% endblock %}
+

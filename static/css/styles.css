@@ -1,0 +1,357 @@
+/* ==========================================================================
+   AI-Based Crop and Pest Disease Detection System - Custom Stylesheet
+   Modern Agricultural Design System with High Contrast & Data Readability
+   ========================================================================== */
+
+:root {
+    --primary-green: #1b5e20;
+    --primary-light: #2e7d32;
+    --primary-accent: #4caf50;
+    --primary-soft: #e8f5e9;
+    --earth-brown: #5d4037;
+    --amber-warning: #f57f17;
+    --danger-red: #c62828;
+    --info-blue: #0277bd;
+    --dark-bg: #121814;
+    --card-bg: #ffffff;
+    --border-color: #e0e0e0;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+    --shadow-md: 0 6px 18px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 28px rgba(0,0,0,0.12);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #f8faf7;
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar */
+.navbar-brand-custom {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--primary-green) !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    color: #334155;
+    padding: 0.5rem 0.85rem;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: var(--primary-green) !important;
+    background-color: var(--primary-soft);
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, rgba(27, 94, 32, 0.95), rgba(46, 125, 50, 0.85)), url('/static/images/hero-bg.jpg') center/cover no-repeat;
+    color: #ffffff;
+    padding: 5rem 0 4.5rem;
+    border-radius: 0 0 2rem 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+.hero-tagline {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    padding: 0.35rem 1.2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255,255,255,0.25);
+    margin-bottom: 1.2rem;
+}
+
+.hero-title {
+    font-size: 2.85rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.2rem;
+}
+
+.hero-subtitle {
+    font-size: 1.15rem;
+    opacity: 0.92;
+    max-width: 680px;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+/* Feature & Benefit Cards */
+.feature-card {
+    background: #ffffff;
+    border: 1px solid #edf2f7;
+    border-radius: 1rem;
+    padding: 1.8rem;
+    height: 100%;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.feature-icon-box {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+}
+
+.icon-green { background: #e8f5e9; color: #2e7d32; }
+.icon-blue { background: #e1f5fe; color: #0288d1; }
+.icon-amber { background: #fff8e1; color: #f57f17; }
+.icon-purple { background: #f3e5f5; color: #7b1fa2; }
+
+/* Workflow Step Box */
+.step-card {
+    background: #ffffff;
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    position: relative;
+    border: 1px solid #e2e8f0;
+    box-shadow: var(--shadow-sm);
+}
+
+.step-number {
+    width: 2.8rem;
+    height: 2.8rem;
+    background: var(--primary-green);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.2rem;
+    box-shadow: 0 4px 10px rgba(27, 94, 32, 0.3);
+}
+
+/* AI Detection Module */
+.upload-dropzone {
+    border: 2px dashed #94a3b8;
+    border-radius: 1.25rem;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.upload-dropzone:hover,
+.upload-dropzone.dragover {
+    border-color: var(--primary-accent);
+    background-color: var(--primary-soft);
+}
+
+.preview-container {
+    max-height: 360px;
+    border-radius: 1rem;
+    overflow: hidden;
+    position: relative;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-container img,
+.preview-container video {
+    max-height: 360px;
+    width: 100%;
+    object-fit: contain;
+}
+
+/* Laser Scanner Animation */
+.scanner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: none;
+    background: radial-gradient(circle, rgba(76, 175, 80, 0.15) 0%, rgba(0,0,0,0.4) 100%);
+    z-index: 10;
+}
+
+.laser-line {
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #00e676, #b9f6ca, #00e676, transparent);
+    box-shadow: 0 0 16px #00e676;
+    animation: scanAnimation 2s ease-in-out infinite alternate;
+}
+
+@keyframes scanAnimation {
+    0% { top: 5%; }
+    100% { top: 95%; }
+}
+
+/* Sample Quick-Select Pill */
+.sample-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #334155;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.sample-pill-btn:hover {
+    border-color: var(--primary-accent);
+    background: var(--primary-soft);
+    color: var(--primary-green);
+    transform: translateY(-1px);
+}
+
+.sample-pill-btn img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Category Badges */
+.badge-category {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 50px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.badge-healthy { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+.badge-fungal { background: #fbe9e7; color: #d84315; border: 1px solid #ffab91; }
+.badge-bacterial { background: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
+.badge-viral { background: #f3e5f5; color: #7b1fa2; border: 1px solid #ce93d8; }
+.badge-pest { background: #fce4ec; color: #c2185b; border: 1px solid #f48fb1; }
+.badge-unknown { background: #eceff1; color: #546e7a; border: 1px solid #b0bec5; }
+
+/* Confidence Gauge */
+.confidence-meter-container {
+    background: #e2e8f0;
+    border-radius: 50px;
+    height: 1.25rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.confidence-bar-fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #4caf50, #2e7d32);
+    transition: width 1s ease-in-out;
+}
+
+/* Agronomic Dossier Tabs */
+.nav-pills-agronomy .nav-link {
+    color: #475569;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    padding: 0.65rem 1.15rem;
+}
+
+.nav-pills-agronomy .nav-link.active {
+    background-color: var(--primary-green);
+    color: #ffffff;
+}
+
+/* Encyclopedia Card */
+.encyclopedia-card {
+    border-radius: 1rem;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    transition: all 0.25s ease;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.encyclopedia-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+    border-color: var(--primary-accent);
+}
+
+/* Weather Risk Widget */
+.risk-indicator-box {
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+}
+
+.risk-level-low { background: #f1f8e9; color: #33691e; border-color: #c5e1a5; }
+.risk-level-moderate { background: #fffde7; color: #f57f17; border-color: #fff59d; }
+.risk-level-high { background: #fff3e0; color: #e65100; border-color: #ffcc80; }
+.risk-level-severe { background: #ffebee; color: #c62828; border-color: #ef9a9a; }
+
+/* Footer */
+footer {
+    margin-top: auto;
+    background-color: #0f1712;
+    color: #94a3b8;
+    border-top: 1px solid #1e2920;
+}
+
+footer a {
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+footer a:hover {
+    color: #4caf50;
+}
+
+/* Print Styles for Diagnostic Advisory */
+@media print {
+    nav, footer, .btn-no-print, .action-buttons, .sample-selector {
+        display: none !important;
+    }
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+    }
+    .card {
+        border: 1px solid #cccccc !important;
+        box-shadow: none !important;
+    }
+}
+

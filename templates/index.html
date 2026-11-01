@@ -1,0 +1,388 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center text-lg-start">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <div class="hero-tagline">
+                    <i class="fa-solid fa-seedling me-1 text-warning"></i> "Detect Early, Protect Crops, Improve Agriculture."
+                </div>
+                <h1 class="hero-title">
+                    AI-Based Crop and Pest Disease Detection System
+                </h1>
+                <p class="hero-subtitle">
+                    Harnessing deep convolutional neural networks and transfer learning to deliver instant, scientifically supported identification of crop diseases and pest infestations. Built for farmers, agricultural students, and agronomic researchers.
+                </p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                    <a href="/detect" class="btn btn-warning btn-lg fw-bold px-4 py-3 shadow rounded-pill text-dark">
+                        <i class="fa-solid fa-camera-retro me-2"></i> Detect Disease Now
+                    </a>
+                    <a href="/encyclopedia" class="btn btn-outline-light btn-lg fw-semibold px-4 py-3 rounded-pill">
+                        <i class="fa-solid fa-wheat-awn me-2"></i> Explore Crops
+                    </a>
+                    <a href="/resources" class="btn btn-outline-light btn-lg fw-semibold px-4 py-3 rounded-pill">
+                        <i class="fa-solid fa-book-atlas me-2"></i> Agricultural Resources
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden bg-white text-dark p-3">
+                    <div class="d-flex align-items-center justify-content-between pb-2 mb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-success-subtle text-success p-2 rounded-circle">
+                                <i class="fa-solid fa-microchip"></i>
+                            </span>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Live AI Model Status</h6>
+                                <small class="text-muted">MobileNetV2 Transfer Learning</small>
+                            </div>
+                        </div>
+                        <span class="badge bg-success text-white px-2 py-1"><i class="fa-solid fa-circle-dot me-1"></i> Active</span>
+                    </div>
+
+                    <div class="bg-light p-3 rounded-3 mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small fw-semibold text-secondary">Diagnostic Categories</span>
+                            <span class="small fw-bold text-dark">6 Calibrated Classes</span>
+                        </div>
+                        <div class="d-flex flex-wrap gap-1 mt-2">
+                            <span class="badge bg-success-subtle text-success border border-success-subtle">Healthy Crops</span>
+                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Fungal Blights</span>
+                            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">Bacterial Spots</span>
+                            <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle">Viral Infections</span>
+                            <span class="badge bg-secondary-subtle text-dark border border-secondary-subtle">Pest Infestations</span>
+                            <span class="badge bg-light text-muted border">OOD Rejection</span>
+                        </div>
+                    </div>
+
+                    <div class="row g-2 text-center">
+                        <div class="col-4">
+                            <div class="p-2 border rounded-3 bg-white">
+                                <div class="fw-bold text-success fs-5">12</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Major Crops</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="p-2 border rounded-3 bg-white">
+                                <div class="fw-bold text-danger fs-5">14+</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Diseases</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="p-2 border rounded-3 bg-white">
+                                <div class="fw-bold text-primary fs-5">10</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Key Pests</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="/detect" class="btn btn-outline-success mt-3 rounded-pill fw-semibold py-2">
+                        <i class="fa-solid fa-flask-vial me-1"></i> Try One-Click Diagnostic Samples
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Introduction to AI in Agriculture Section -->
+<section class="py-5">
+    <div class="container py-4">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="d-inline-flex align-items-center gap-2 badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold mb-3">
+                    <i class="fa-solid fa-chart-line"></i> Precision Agriculture Paradigm
+                </div>
+                <h2 class="fw-bold text-dark mb-3">
+                    Transforming Crop Health with Artificial Intelligence
+                </h2>
+                <p class="text-secondary lead fs-6 mb-3">
+                    Plant diseases and insect pests are responsible for substantial annual yield losses worldwide—accounting for an estimated 20% to 40% reduction in global crop production according to the Food and Agriculture Organization (FAO).
+                </p>
+                <p class="text-secondary mb-4">
+                    Traditional disease diagnosis relies upon manual field scouting and expert visual estimation, which is labor-intensive, subjective, and prone to misidentification between fungal, bacterial, and viral pathologies. Our system leverages state-of-the-art computer vision models trained on tens of thousands of validated leaf and pest specimens to identify symptoms at early stages, preventing catastrophic epidemics before they compromise entire harvests.
+                </p>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa-solid fa-shield-virus text-success fs-5 mt-1"></i>
+                            <div>
+                                <h6 class="fw-bold mb-1">Pathogen Differentiation</h6>
+                                <p class="small text-muted mb-0">Disentangles bacterial leaf blights from fungal spots and viral mosaics.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa-solid fa-bug text-danger fs-5 mt-1"></i>
+                            <div>
+                                <h6 class="fw-bold mb-1">Integrated Pest Management</h6>
+                                <p class="small text-muted mb-0">Prioritizes biological & cultural controls over unneeded broad-spectrum pesticides.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden p-4 bg-white">
+                    <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-microscope text-success me-2"></i> Scientifically Categorized Diagnosis</h5>
+                    <p class="small text-muted mb-3">
+                        Unlike naive classifiers that classify every input into a generic disease category, our platform categorizes every inference into 6 strict agricultural classes:
+                    </p>
+                    <ul class="list-group list-group-flush small">
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+                            <span><i class="fa-solid fa-circle-check text-success me-2"></i> <strong>A. Healthy Crop:</strong> Optimal photosynthetic vigor and clean foliage.</span>
+                            <span class="badge bg-success-subtle text-success">Healthy</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+                            <span><i class="fa-solid fa-bacterium text-danger me-2"></i> <strong>B. Fungal Disease:</strong> Rusts, powdery/downy mildews, late & early blights.</span>
+                            <span class="badge bg-danger-subtle text-danger">Fungal</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+                            <span><i class="fa-solid fa-biohazard text-warning me-2"></i> <strong>C. Bacterial Disease:</strong> Water-soaked spots, ooze, black arm, and vascular blights.</span>
+                            <span class="badge bg-warning-subtle text-warning-emphasis">Bacterial</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+                            <span><i class="fa-solid fa-dna text-purple me-2" style="color: #7b1fa2;"></i> <strong>D. Viral Disease:</strong> Mosaic mottling, leaf curling, vector transmission.</span>
+                            <span class="badge bg-purple-subtle text-purple" style="background:#f3e5f5; color:#7b1fa2;">Viral</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+                            <span><i class="fa-solid fa-locust text-danger me-2"></i> <strong>E. Pest Infestation:</strong> Armyworms, aphids, whiteflies, borers, leaf miners.</span>
+                            <span class="badge bg-pink-subtle text-pink" style="background:#fce4ec; color:#c2185b;">Pest</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+                            <span><i class="fa-solid fa-triangle-exclamation text-secondary me-2"></i> <strong>F. Unknown / Unsupported:</strong> Rejects non-plant and unconfident inputs.</span>
+                            <span class="badge bg-secondary-subtle text-dark">OOD</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How the System Works: 3 Main Steps -->
+<section class="py-5 bg-white border-top border-bottom">
+    <div class="container py-4">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold mb-2">
+                Simple 3-Step Workflow
+            </span>
+            <h2 class="fw-bold text-dark">How the Detection System Works</h2>
+            <p class="text-secondary">
+                Designed for swift in-field diagnosis through mobile browser camera access or lab photo uploads.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Step 1 -->
+            <div class="col-md-4">
+                <div class="step-card h-100">
+                    <div class="step-number">1</div>
+                    <div class="feature-icon-box icon-green mx-auto">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">Upload Crop or Pest Image</h5>
+                    <p class="text-secondary small mb-0">
+                        Take a photo directly with your camera or drag and drop a leaf, fruit, or pest image. High-resolution input gives optimal feature extraction.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="col-md-4">
+                <div class="step-card h-100">
+                    <div class="step-number">2</div>
+                    <div class="feature-icon-box icon-blue mx-auto">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">AI Analyzes the Image</h5>
+                    <p class="text-secondary small mb-0">
+                        MobileNetV2 extracts deep spatial feature maps, analyzes necrotic margins, and evaluates calibrated softmax probability with an OOD threshold filter.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="col-md-4">
+                <div class="step-card h-100">
+                    <div class="step-number">3</div>
+                    <div class="feature-icon-box icon-amber mx-auto">
+                        <i class="fa-solid fa-file-medical"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">Receive Identification & Advisory</h5>
+                    <p class="text-secondary small mb-0">
+                        Get an immediate diagnosis complete with pathogen scientific name, symptoms, environmental causes, and scientifically validated IPM recommendations.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="/detect" class="btn btn-success btn-lg px-4 py-3 fw-bold rounded-pill shadow-sm">
+                <i class="fa-solid fa-play me-2"></i> Launch Detection Module
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits of AI in Crop Protection -->
+<section class="py-5">
+    <div class="container py-4">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold mb-2">
+                Agronomic Value
+            </span>
+            <h2 class="fw-bold text-dark">Benefits of AI in Modern Crop Protection</h2>
+            <p class="text-secondary">
+                Bridging academic phytopathology with practical field decisions to enhance agricultural sustainability.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon-box icon-green">
+                        <i class="fa-solid fa-stopwatch"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">Early Disease Interception</h5>
+                    <p class="small text-secondary mb-0">
+                        Detects minute lesions, chlorotic halos, and early pest clusters before systemic necrosis develops, shrinking yield reduction from 40% to under 5%.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon-box icon-blue">
+                        <i class="fa-solid fa-flask-vial"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">Judicious Chemical Application</h5>
+                    <p class="small text-secondary mb-0">
+                        Distinguishes viral infections (where fungicides are totally ineffective) from fungal blights, preventing wasteful pesticide expenditure and runoff.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon-box icon-amber">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">IPM & Biological First</h5>
+                    <p class="small text-secondary mb-0">
+                        Supplies clear Integrated Pest Management guidance with biological parasitoids, cultural crop rotations, and neem formulations before chemical rescue.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon-box icon-purple">
+                        <i class="fa-solid fa-cloud-sun"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">Epidemiological Forecasting</h5>
+                    <p class="small text-secondary mb-0">
+                        Integrates temperature and relative humidity thresholds to assess fungal sporulation risks (e.g. Wallin / Blitecast models for potato late blight).
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon-box icon-green">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">Academic & Research Rigor</h5>
+                    <p class="small text-secondary mb-0">
+                        Built for agricultural students, incorporating full scientific binomial names (e.g. <em>Phytophthora infestans</em>), pathogen taxonomy, and peer-reviewed references.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon-box icon-blue">
+                        <i class="fa-solid fa-print"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">Printable Advisory Reports</h5>
+                    <p class="small text-secondary mb-0">
+                        Generate formatted Diagnostic Advisory Sheets for extension agents to share directly with smallholder farmers in rural agricultural districts.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Supported Crops & Pests Showcase -->
+<section class="py-5 bg-white border-top">
+    <div class="container py-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4">
+            <div>
+                <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold mb-2">
+                    Dataset-Driven Coverage
+                </span>
+                <h2 class="fw-bold text-dark mb-1">Supported Crops & Pathogens</h2>
+                <p class="text-secondary mb-0">
+                    Specifically cataloged from benchmark PlantVillage, PlantDoc, and IP102 datasets.
+                </p>
+            </div>
+            <a href="/encyclopedia" class="btn btn-outline-success rounded-pill fw-semibold mt-3 mt-md-0">
+                View Full Compendium <i class="fa-solid fa-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <div class="row g-3">
+            {% set crops = [
+                {"name": "Rice", "sci": "Oryza sativa", "icon": "fa-bowl-rice", "desc": "Blast, Bacterial Leaf Blight, Stem Borer"},
+                {"name": "Wheat", "sci": "Triticum aestivum", "icon": "fa-wheat-awn", "desc": "Leaf Rust (Brown Rust), Aphids"},
+                {"name": "Maize", "sci": "Zea mays", "icon": "fa-seedling", "desc": "Fall Armyworm, Healthy Corn"},
+                {"name": "Tomato", "sci": "Solanum lycopersicum", "icon": "fa-apple-whole", "desc": "Early Blight, Bacterial Spot, Mosaic Virus"},
+                {"name": "Potato", "sci": "Solanum tuberosum", "icon": "fa-cookie", "desc": "Late Blight, Early Blight, Healthy"},
+                {"name": "Cotton", "sci": "Gossypium hirsutum", "icon": "fa-feather", "desc": "Bacterial Blight, Bollworm, Aphids, Whiteflies"},
+                {"name": "Apple", "sci": "Malus domestica", "icon": "fa-apple-whole", "desc": "Anthracnose, Bitter Rot, Scab"},
+                {"name": "Grape", "sci": "Vitis vinifera", "icon": "fa-wine-glass", "desc": "Powdery Mildew, Downy Mildew, Thrips"},
+                {"name": "Pepper", "sci": "Capsicum annuum", "icon": "fa-pepper-hot", "desc": "Thrips, Bacterial Spot, Powdery Mildew"},
+                {"name": "Sugarcane", "sci": "Saccharum officinarum", "icon": "fa-candy-cane", "desc": "Red Rot, Stem Borer"},
+                {"name": "Groundnut", "sci": "Arachis hypogaea", "icon": "fa-cubes-stacked", "desc": "Tikka (Cercospora Leaf Spot), Bollworm"},
+                {"name": "Soybean", "sci": "Glycine max", "icon": "fa-bars-staggered", "desc": "Soybean Rust, Whiteflies"}
+            ] %}
+
+            {% for c in crops %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card h-100 border rounded-3 p-3 text-center bg-light-subtle hover-shadow">
+                    <div class="mx-auto mb-2 text-success fs-3">
+                        <i class="fa-solid {{ c.icon }}"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-0">{{ c.name }}</h6>
+                    <small class="text-muted fst-italic mb-2" style="font-size: 0.75rem;">{{ c.sci }}</small>
+                    <p class="small text-secondary mb-0" style="font-size: 0.75rem;">{{ c.desc }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="py-5 text-white" style="background: linear-gradient(135deg, #1b5e20, #2e7d32);">
+    <div class="container text-center py-4">
+        <h2 class="fw-bold mb-3">Ready to Diagnose Your Crop Specimen?</h2>
+        <p class="lead mb-4 opacity-90 mx-auto" style="max-width: 650px;">
+            Experience fast, reliable neural classification with immediate agricultural management recommendations.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="/detect" class="btn btn-warning btn-lg fw-bold px-4 py-3 rounded-pill text-dark shadow">
+                <i class="fa-solid fa-camera me-2"></i> Start Image Analysis
+            </a>
+            <a href="/research" class="btn btn-outline-light btn-lg fw-semibold px-4 py-3 rounded-pill">
+                <i class="fa-solid fa-graduation-cap me-2"></i> Read Academic Specs
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

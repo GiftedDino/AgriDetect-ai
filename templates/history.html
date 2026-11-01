@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <span class="badge bg-success-subtle text-success px-3 py-1 rounded-pill fw-semibold mb-2">
+                <i class="fa-solid fa-clock-rotate-left me-1"></i> SQLite Database Archive
+            </span>
+            <h1 class="fw-bold text-dark mb-0">Diagnostic Scan History & Analytics</h1>
+        </div>
+        <div>
+            <a href="/detect" class="btn btn-success rounded-pill px-4 fw-semibold shadow-sm">
+                <i class="fa-solid fa-camera me-1"></i> Perform New Scan
+            </a>
+        </div>
+    </div>
+
+    <!-- Analytics Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center bg-white">
+                <div class="text-secondary small fw-semibold mb-1">Total Scans</div>
+                <div class="h3 fw-bold text-dark mb-0">{{ stats.total }}</div>
+                <small class="text-muted" style="font-size: 0.72rem;">Field Inferences</small>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center bg-white">
+                <div class="text-success small fw-semibold mb-1">Healthy Crops</div>
+                <div class="h3 fw-bold text-success mb-0">{{ stats.healthy }}</div>
+                <small class="text-muted" style="font-size: 0.72rem;">No Pathogen</small>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center bg-white">
+                <div class="text-danger small fw-semibold mb-1">Fungal Blights</div>
+                <div class="h3 fw-bold text-danger mb-0">{{ stats.fungal }}</div>
+                <small class="text-muted" style="font-size: 0.72rem;">Blights & Rusts</small>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center bg-white">
+                <div class="text-warning-emphasis small fw-semibold mb-1">Bacterial Spots</div>
+                <div class="h3 fw-bold text-warning-emphasis mb-0">{{ stats.bacterial }}</div>
+                <small class="text-muted" style="font-size: 0.72rem;">Xanthomonas spp.</small>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center bg-white">
+                <div class="text-danger small fw-semibold mb-1" style="color: #c2185b !important;">Pest Attacks</div>
+                <div class="h3 fw-bold mb-0" style="color: #c2185b;">{{ stats.pest }}</div>
+                <small class="text-muted" style="font-size: 0.72rem;">Insects / Borers</small>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center bg-white">
+                <div class="text-muted small fw-semibold mb-1">Unknown / OOD</div>
+                <div class="h3 fw-bold text-secondary mb-0">{{ stats.unknown }}</div>
+                <small class="text-muted" style="font-size: 0.72rem;">Filtered Inputs</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scans Table Card -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+        <div class="card-header bg-white border-bottom p-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+            <div class="input-group" style="max-width: 380px;">
+                <span class="input-group-text bg-light border-end-0 text-muted">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" id="historySearch" class="form-control bg-light border-start-0 ps-0" placeholder="Filter scans by crop, diagnosis or category..." onkeyup="filterHistory()">
+            </div>
+            <span class="small text-muted">
+                Showing <strong>{{ records|length }}</strong> historical records in local SQLite ledger
+            </span>
+        </div>
+
+        {% if records %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" id="historyTable">
+                <thead class="table-light small text-secondary">
+                    <tr>
+                        <th style="width: 70px;">Image</th>
+                        <th>Host Crop</th>
+                        <th>Diagnosis & Scientific Name</th>
+                        <th>Category</th>
+                        <th style="width: 140px;">Confidence</th>
+                        <th>User Validation</th>
+                        <th>Date & Time</th>
+                        <th class="text-end" style="width: 120px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in records %}
+                    <tr id="row-{{ r.id }}" class="history-row" data-search="{{ r.crop_name }} {{ r.diagnosis_name }} {{ r.category }} {{ r.scientific_name }}">
+                        <td>
+                            <img src="{{ r.image_path }}" alt="Specimen" class="rounded-3 object-fit-cover shadow-sm" style="width: 52px; height: 52px;">
+                        </td>
+                        <td>
+                            <span class="fw-semibold text-dark">{{ r.crop_name or 'Unspecified' }}</span>
+                        </td>
+                        <td>
+                            <div class="fw-bold text-dark">{{ r.diagnosis_name }}</div>
+                            <small class="text-muted fst-italic">{{ r.scientific_name or 'N/A' }}</small>
+                        </td>
+                        <td>
+                            {% if r.is_healthy %}
+                                <span class="badge-category badge-healthy">Healthy</span>
+                            {% elif r.is_pest %}
+                                <span class="badge-category badge-pest">Pest</span>
+                            {% elif 'Fungal' in r.category %}
+                                <span class="badge-category badge-fungal">Fungal</span>
+                            {% elif 'Bacterial' in r.category %}
+                                <span class="badge-category badge-bacterial">Bacterial</span>
+                            {% elif 'Viral' in r.category %}
+                                <span class="badge-category badge-viral">Viral</span>
+                            {% else %}
+                                <span class="badge-category badge-unknown">Unsupported</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="progress flex-grow-1" style="height: 6px;">
+                                    <div class="progress-bar bg-success" style="width: {{ (r.confidence * 100)|round(0) }}%;"></div>
+                                </div>
+                                <span class="small fw-semibold text-dark">{{ (r.confidence * 100)|round(1) }}%</span>
+                            </div>
+                        </td>
+                        <td>
+                            {% if r.user_feedback == 'correct' %}
+                                <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                    <i class="fa-solid fa-check me-1"></i> Verified
+                                </span>
+                            {% elif r.user_feedback == 'incorrect' %}
+                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
+                                    <i class="fa-solid fa-xmark me-1"></i> Contested
+                                </span>
+                            {% else %}
+                                <span class="badge bg-light text-muted border">Pending Review</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <small class="text-secondary">{{ r.created_at.strftime('%Y-%m-%d %H:%M') if r.created_at else 'N/A' }}</small>
+                        </td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm">
+                                <a href="/result/{{ r.id }}" class="btn btn-outline-success" title="View Full Report">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                                <button type="button" class="btn btn-outline-danger" title="Delete Record" onclick="deleteRecord({{ r.id }})">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fa-solid fa-folder-open text-muted fa-3x mb-3"></i>
+            <h5 class="fw-bold text-dark">No Diagnostic Scans Recorded Yet</h5>
+            <p class="text-secondary small mb-3">Use the detection module or one-click specimen tester to diagnose crop samples.</p>
+            <a href="/detect" class="btn btn-success btn-sm rounded-pill px-4 fw-semibold">
+                Start First Image Scan
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function filterHistory() {
+    const q = document.getElementById('historySearch').value.toLowerCase().trim();
+    const rows = document.querySelectorAll('.history-row');
+    rows.forEach(r => {
+        const s = r.getAttribute('data-search').toLowerCase();
+        r.style.display = (!q || s.includes(q)) ? '' : 'none';
+    });
+}
+
+function deleteRecord(id) {
+    if (!confirm('Are you sure you want to delete scan record #' + id + '?')) return;
+    fetch('/api/history/' + id, { method: 'DELETE' })
+        .then(r => r.json())
+        .then(res => {
+            if (res.success) {
+                const row = document.getElementById('row-' + id);
+                if (row) row.remove();
+            } else {
+                alert('Failed to delete record.');
+            }
+        });
+}
+</script>
+{% endblock %}
+

@@ -1,0 +1,63 @@
+{
+  "metrics": {
+    "accuracy": 3.85,
+    "macro_precision": 0.15,
+    "macro_recall": 3.85,
+    "macro_f1": 0.28,
+    "num_classes": 26,
+    "confusion_matrix_shape": [
+      26,
+      26
+    ],
+    "classes": [
+      "Tomato Early Blight",
+      "Potato Late Blight",
+      "Rice Blast",
+      "Grape Powdery Mildew",
+      "Grape Downy Mildew",
+      "Wheat Leaf Rust",
+      "Apple Anthracnose & Bitter Rot",
+      "Groundnut Tikka (Cercospora Leaf Spot)",
+      "Sugarcane Red Rot",
+      "Rice Bacterial Leaf Blight",
+      "Tomato Bacterial Spot",
+      "Cotton Bacterial Blight (Black Arm)",
+      "Tomato Mosaic & Yellow Leaf Curl Virus",
+      "Cotton & Green Peach Aphids",
+      "Fall Armyworm (FAW)",
+      "Whiteflies Infestation",
+      "Yellow Rice Stem Borer",
+      "Cotton / American Bollworm",
+      "Chilli & Onion Thrips",
+      "Serpentine Leaf Miner",
+      "Rice (Healthy)",
+      "Tomato (Healthy)",
+      "Potato (Healthy)",
+      "Maize (Healthy)",
+      "Cotton (Healthy)",
+      "Grape (Healthy)"
+    ]
+  },
+  "history": {
+    "train_loss": [
+      3.1103,
+      2.6306,
+      2.3627
+    ],
+    "val_loss": [
+      3.666,
+      4.2299,
+      4.3813
+    ],
+    "train_acc": [
+      7.69,
+      14.42,
+      15.71
+    ],
+    "val_acc": [
+      3.85,
+      3.85,
+      3.85
+    ]
+  }
+}
