@@ -237,3 +237,5 @@ Agriculture.`</strong>`{=html}
 ```{=html}
 </p>
 ```
+⭐ If this project inspires you, consider giving it a star — it motivates future development! 🌱
+
