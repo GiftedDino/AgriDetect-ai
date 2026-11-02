@@ -1,0 +1,25 @@
+{
+  "name": "ai-crop-and-pest-disease-detection",
+  "version": "1.0.0",
+  "description": "AI-Based Crop and Pest Disease Detection System using Deep Learning (MobileNetV2, PyTorch) and FastAPI",
+  "main": "run.py",
+  "scripts": {
+    "start": "python run.py",
+    "dev": "uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload",
+    "train": "python app/ml/train_eval.py",
+    "test": "python -m unittest tests/test_app.py"
+  },
+  "keywords": [
+    "deep-learning",
+    "crop-disease-detection",
+    "mobilenetv2",
+    "pytorch",
+    "fastapi",
+    "precision-agriculture",
+    "plant-pathology",
+    "pest-infestation"
+  ],
+  "author": "AgriDetect AI",
+  "license": "MIT"
+}
+
