@@ -13,6 +13,7 @@ students, extension workers, and researchers.
 
 ## 📌 Overview
 
+<img width="1900" height="962" alt="Screenshot 2026-11-02 113926" src="https://github.com/user-attachments/assets/048d2504-254d-4da0-b31a-3c91ac95d43e" />
 Plant diseases and insect pests can significantly affect crop health and
 agricultural productivity. Traditional diagnosis often depends on manual
 field observation and expert assessment.
@@ -25,6 +26,8 @@ The website describes its image-classification approach as **MobileNetV2
 transfer learning**, with a PyTorch-based model engine.
 
 ## ✨ Features
+
+<img width="1887" height="883" alt="Screenshot 2026-11-02 114004" src="https://github.com/user-attachments/assets/1c14e8f5-0ed2-4af5-b14c-181fab556909" />
 
 -   **AI Image Scanner:** Submit a crop, leaf, fruit, or pest image for
     analysis.
@@ -92,6 +95,7 @@ The website currently lists the following crops and associated examples:
   Soybean                 *Glycine max*           Soybean rust,
                                                   whiteflies
   -----------------------------------------------------------------------
+<img width="1896" height="971" alt="Screenshot 2026-11-02 114031" src="https://github.com/user-attachments/assets/3d5c1dda-f5c6-4b5e-b157-bb5c15953fc6" />
 
 *The exact diseases and pests available for prediction depend on the
 model and its supported classes.*
