@@ -1,8 +1,8 @@
-# 🌿 LeafScan AI --- AI-Based Crop & Pest Disease Detection
+# 🌿 AgriDetect AI --- AI-Based Crop & Pest Disease Detection
 
 > **Detect Early, Protect Crops, Improve Agriculture.**
 
-LeafScan AI is an AI-powered agricultural platform designed to help
+AgriDetect AI is an AI-powered agricultural platform designed to help
 identify crop diseases and pest infestations from plant images. It aims
 to make crop-health information more accessible to farmers, agricultural
 students, extension workers, and researchers.
@@ -17,7 +17,7 @@ Plant diseases and insect pests can significantly affect crop health and
 agricultural productivity. Traditional diagnosis often depends on manual
 field observation and expert assessment.
 
-LeafScan AI uses deep-learning-based image analysis to support faster
+Agridetect AI uses deep-learning-based image analysis to support faster
 identification of visible crop-health issues and provide relevant
 agricultural information and management recommendations.
 
@@ -202,7 +202,7 @@ match the source code before publishing.*
 
 ## ⚠️ Disclaimer
 
-LeafScan AI is intended as an educational and decision-support tool. AI
+Agridetect AI is intended as an educational and decision-support tool. AI
 predictions may be incorrect, especially when images are unclear or
 conditions are outside the supported classes.
 
@@ -223,7 +223,7 @@ pesticide-label instructions.
 
 ## 👨‍💻 Project
 
-**LeafScan AI --- AI-Based Crop & Pest Disease Detection System**
+**AgriDetect AI --- AI-Based Crop & Pest Disease Detection System**
 
 Live application: https://leafscan-ai-y9ob.onrender.com/
 
