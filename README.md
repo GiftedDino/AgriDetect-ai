@@ -168,10 +168,10 @@ A typical Python project setup may look like this:
 
 ``` bash
 # Clone your repository
-git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY.git
+git clone https://github.com/GiftedDino/AgriDetect-ai.git
 
 # Enter the project directory
-cd YOUR-REPOSITORY
+cd AgriDetect-ai
 
 # Create a virtual environment
 python -m venv venv
